@@ -10,6 +10,7 @@ void initBrd (char box[][COL], int board[][COL]);
 void game(char, char, char [][COL], int [][COL]);
 char menu();
 void printBoard(char[][COL]);
+void printBoard(int[][COL]);
 bool spotTaken (char [][COL], int);
 void turnPlayer (char [][COL], char);
 void turnCPU (char [][COL], char);
@@ -87,11 +88,26 @@ void initBrd(char box[][COL], int board[][COL]) {
             count++; 
         }
     }
+    for (int i = 0; i < ROW; i++) {
+        std::cout<<std::setw(6) << "|" << std::setw(6) <<  "|" << std::setw(6) << "|" << '\n'; 
+        
+        for (int j = 0; j < COL; j++) {
+             std::cout << std::setw(3) << board[i][j] << std::setw(3) << "|";
+            
+        }
+        //std::cout << '\n' << "______________" << '\n';
+        std::cout << '\n';
+        std::cout << "_____|_____|_____|";
+        std::cout << '\n';
+    }
+ 
 }
 void game (char playerShape, char CPUShape, char box[][COL], int board[][COL]) {
     bool playWin, cpuWin, tie;
     do {
         turnPlayer(box, playerShape);
+        printBoard(board);
+        std::cout << "\n\n\n";
         printBoard(box);
         if (checkWin(box,playerShape) == true) {
             std::cout << "Player wins" << '\n';
@@ -103,6 +119,8 @@ void game (char playerShape, char CPUShape, char box[][COL], int board[][COL]) {
         }
         std::cout << "\n\n\n\n\n\n\n\n\n\n\n";
         turnCPU(box,CPUShape);
+        printBoard(board);
+        std::cout << "\n\n\n";
         printBoard(box);
         if (checkWin(box,CPUShape) == true) {
             std::cout << "CPU wins" << '\n';
@@ -158,6 +176,23 @@ void printBoard (char box [][COL]) {
    
 }
 
+void printBoard (int board[][COL]) {
+     for (int i = 0; i < ROW; i++) {
+        std::cout<<std::setw(6) << "|" << std::setw(6) <<  "|" << std::setw(6) << "|" << '\n'; 
+        
+        for (int j = 0; j < COL; j++) {
+             std::cout << std::setw(3) << board[i][j] << std::setw(3) << "|";
+            
+        }
+        //std::cout << '\n' << "______________" << '\n';
+        std::cout << '\n';
+        std::cout << "_____|_____|_____|";
+        std::cout << '\n';
+    }
+   
+
+}
+
 bool spotTaken (char box[][COL], int spot) {
     if (spot <= 3) {
         if (box[0][spot - 1] ==' ') {
@@ -183,6 +218,7 @@ void turnPlayer (char box[][COL], char playerShape) {
     int player;
     std::cout << "Your Turn" << '\n';
     std::cin >> player;
+    if (player > 9) std::cout<< "WRONG INPUT"; exit(EXIT_FAILURE);
     if (player <= 3) {
         if (spotTaken(box,player) == true) {
             std::cout << "Spot taken" << '\n';
