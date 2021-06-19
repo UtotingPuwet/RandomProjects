@@ -29,7 +29,6 @@ int main () {
     //box is a parallel array
     //of the board but will 
     //contain the characters 'O' & 'X'
-    int player;
     char CPUShape, 
          playerShape;
 
@@ -59,25 +58,7 @@ int main () {
 
 void initBrd(char box[][COL], int board[][COL]) {
     //initializing box
-    for (int i = 0; i < ROW; i++) {
-        for (int j = 0; j < COL; j++) {
-            box[i][j] = ' ';   
-        }
-    }
 
-    //box is being used here to print the visual board
-    for (int i = 0; i < ROW; i++) {
-        std::cout<<std::setw(6) << "|" << std::setw(6) <<  "|" << std::setw(6) << "|" << '\n'; 
-        
-        for (int j = 0; j < COL; j++) {
-             std::cout << std::setw(3) << box[i][j] << std::setw(3) << "|";
-            
-        }
-        //std::cout << '\n' << "______________" << '\n';
-        std::cout << '\n';
-        std::cout << "_____|_____|_____|";
-        std::cout << '\n';
-    }
 
     int count = 1;
     //parallel array to box but is to actually be 
@@ -88,11 +69,34 @@ void initBrd(char box[][COL], int board[][COL]) {
             count++; 
         }
     }
+
+
+    for (int i = 0; i < ROW; i++) {
+        for (int j = 0; j < COL; j++) {
+            box[i][j] = ' ';   
+        }
+    }
+
+    //print board first so user knows what numbers
+    //correlate to which spot on the  grid
     for (int i = 0; i < ROW; i++) {
         std::cout<<std::setw(6) << "|" << std::setw(6) <<  "|" << std::setw(6) << "|" << '\n'; 
         
         for (int j = 0; j < COL; j++) {
              std::cout << std::setw(3) << board[i][j] << std::setw(3) << "|";
+            
+        }
+        //std::cout << '\n' << "______________" << '\n';
+        std::cout << '\n';
+        std::cout << "_____|_____|_____|";
+        std::cout << '\n';
+    }
+    //box is being used here to print the visual board
+    for (int i = 0; i < ROW; i++) {
+        std::cout<<std::setw(6) << "|" << std::setw(6) <<  "|" << std::setw(6) << "|" << '\n'; 
+        
+        for (int j = 0; j < COL; j++) {
+             std::cout << std::setw(3) << box[i][j] << std::setw(3) << "|";
             
         }
         //std::cout << '\n' << "______________" << '\n';
@@ -130,16 +134,21 @@ void game (char playerShape, char CPUShape, char box[][COL], int board[][COL]) {
             std::cout << "Tie" << '\n';
             return;
         }
+        //hypothetically we wouldnt need to  use any 3 of these but
+        //just in case win or tie doesnt  go through we still have
+        //the do-while loop and these 3 functions to check
         playWin = checkWin(box,playerShape);
         cpuWin = checkWin(box,CPUShape);
         tie = checkTie(box);
     }while (tie == false && cpuWin == false && playWin == false);
-
+    //print this if the  checkWin and checkTie dont work
+    //and we exit the do-while loop
     if (playWin) std::cout  << "Player wins" << '\n';
     if (cpuWin) std::cout << "CPU wins" << '\n';
     if (tie) std::cout << "Tie"  << '\n';
 }
 
+//basic menu function
 char menu () {
     unsigned short shapeChoice;
     std::cout << "The shape 'X' will go first. The shape 'O' will go second. << '\n'";
@@ -160,6 +169,7 @@ char menu () {
     }
 }
 
+//printboard function for char array box
 void printBoard (char box [][COL]) {
      for (int i = 0; i < ROW; i++) {
         std::cout<<std::setw(6) << "|" << std::setw(6) <<  "|" << std::setw(6) << "|" << '\n'; 
@@ -176,6 +186,7 @@ void printBoard (char box [][COL]) {
    
 }
 
+//printboard function for int array board
 void printBoard (int board[][COL]) {
      for (int i = 0; i < ROW; i++) {
         std::cout<<std::setw(6) << "|" << std::setw(6) <<  "|" << std::setw(6) << "|" << '\n'; 
@@ -194,6 +205,10 @@ void printBoard (int board[][COL]) {
 }
 
 bool spotTaken (char box[][COL], int spot) {
+    //we first start with the rows and see which row
+    //the int spot is in.  afterwards we check if
+    //the character array has a space because then
+    //that means it isnt taken so we return false
     if (spot <= 3) {
         if (box[0][spot - 1] ==' ') {
             return false;
@@ -218,7 +233,12 @@ void turnPlayer (char box[][COL], char playerShape) {
     int player;
     std::cout << "Your Turn" << '\n';
     std::cin >> player;
-    if (player > 9) std::cout<< "WRONG INPUT"; exit(EXIT_FAILURE);
+    //checking player input
+    if (player > 9) exit(EXIT_FAILURE); 
+    //all is to see which row the input is in then
+    //calculate which column the input is in 
+    //but before all that we see if spot is taken and if so
+    //we have the player put another input
     if (player <= 3) {
         if (spotTaken(box,player) == true) {
             std::cout << "Spot taken" << '\n';
@@ -282,6 +302,10 @@ void turnCPU (char box[][COL], char CPUShape) {
 
 bool checkTie (char box[][COL]) {
     int count = 0;
+    //check tie by seeing if all characters in
+    //the array are not a space: ' ' 
+    //if they arent then add to count
+    //if count = 9 then all 9 squares are full
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             if (box[i][j] != ' ') {
@@ -298,6 +322,9 @@ bool checkWin (char box[][COL], char shape) {
         int countRow = 0;
         int countCol = 0;
         for (int j = 0; j < 3; j++) {
+            //count the amount of characters in the row
+            //that equal the shape then increment
+            //col or row accordingly
             if (box[i][j] == shape) countRow++;
             if (box[j][i] == shape) countCol++;
         }
@@ -305,6 +332,7 @@ bool checkWin (char box[][COL], char shape) {
         if (countCol == 3) return true;
     }
     
+    //checking diagonals here
     if (box[0][0] == shape && box[1][1] == shape && box[2][2] == shape) {
         return true;
     }
