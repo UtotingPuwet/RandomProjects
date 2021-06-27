@@ -1,0 +1,8 @@
+.navi {
+    position: fixed;
+    color: pink;
+    width: 60px;
+    border: 5px  solid lightblue;
+    padding: 10px;
+    text-align:center;
+}
