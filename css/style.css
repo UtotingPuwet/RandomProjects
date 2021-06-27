@@ -11,14 +11,16 @@
     transform: translate(-50%, -50%);
 }
 
-.square {
-  width: 100%;
-  padding-bottom: 100%;
-  position: relative;
-  background-color: #2980b9;
-}
-.content {
-  position: absolute;
-  top: 0;
-  left: 0;
+.littlebox {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: lightpink;
+    background: lightblue;
+    width: 300px;
+    border: 20px solid lightgrey;
+    padding: 50px;
+    margin: 20px;
+    text-align: center;
 }
